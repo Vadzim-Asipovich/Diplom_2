@@ -12,31 +12,42 @@ public class UserUpdateTest {
     private final UserLoginSteps userLoginSteps = new UserLoginSteps();
     private final UserToRegister user = new UserToRegister(SampleUser.email, SampleUser.password, SampleUser.name);
     private final UserToRegister updatedUser = new UserToRegister(SampleUser.secondEmail, SampleUser.secondPassword, SampleUser.secondName);
-    private String accessToken;
+    private final List<String> accessTokenList = new ArrayList<>();
     @Before
     public void setUp() {
         userRegistrationSteps.createUser(user);
-        accessToken = userRegistrationSteps.getAccessToken();
+        accessTokenList.add(userRegistrationSteps.getAccessToken());
     }
     @After
     public void tearDown() {
-        userSteps.deleteUser(accessToken);
+        for (String token : accessTokenList) {
+            userSteps.deleteUser(token);
+        }
     }
     @Test
     @DisplayName("It's possible to update all user fields as an authorized user")
     public void updateAuthorizedUserTest() {
-        userSteps.updateUser(accessToken, updatedUser);
+        userSteps.updateUser(accessTokenList.get(0), updatedUser);
         userSteps.checkUserUpdateSuccessfulResponse();
         userSteps.checkUserUpdateResponseContainsUpdatedUserData(updatedUser);
         userLoginSteps.loginUser(new UserToLogin(updatedUser.getEmail(), updatedUser.getPassword()));
         userLoginSteps.checkUserLoginSuccessfulResponse();
     }
+
     @Test
     @DisplayName("It's impossible to update user as an unauthorized user")
     public void updateUnauthorizedUserTest() {
         userSteps.updateUser("", updatedUser);
         userSteps.checkUnauthorizedUserUpdateFailedResponse();
     }
-    //TODO: Add test for duplicate email
+
+    @Test
+    @DisplayName("It's impossible to update user with duplicate email")
+    public void updateDuplicateEmailUserTest() {
+        userRegistrationSteps.createUser(updatedUser);
+        accessTokenList.add(userRegistrationSteps.getAccessToken());
+        userSteps.updateUser(accessTokenList.get(1), user);
+        userSteps.checkUserUpdateToExistingEmailFails();
+    }
 
 }

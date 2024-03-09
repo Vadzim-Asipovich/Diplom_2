@@ -42,4 +42,14 @@ public class UserSteps {
                 .and()
                 .body("user.name", equalTo(body.getName()));
     }
+    @Step("Check that impossible to update user with duplicate email")
+    public void checkUserUpdateToExistingEmailFails() {
+        response
+                .assertThat()
+                .statusCode(403)
+                .and()
+                .body("success", equalTo(false))
+                .and()
+                .body("message", equalTo("User with such email already exists"));
+    }
 }
