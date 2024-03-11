@@ -4,7 +4,7 @@ import io.restassured.response.ValidatableResponse;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class UserLoginSteps {
-    private LoginAPI api = new LoginAPI();
+    private final LoginAPI api = new LoginAPI();
     private ValidatableResponse response;
     @Step("Login user")
     public void loginUser(UserToLogin user) {

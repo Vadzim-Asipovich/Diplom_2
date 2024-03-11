@@ -5,7 +5,7 @@ import org.junit.Test;
 
 public class UserLoginSuccessfulTest {
     private final UserRegistrationSteps userRegistrationSteps = new UserRegistrationSteps();
-    private final UserSteps userActionSteps = new UserSteps();
+    private final UserSteps userSteps = new UserSteps();
     private final UserLoginSteps userLoginSteps = new UserLoginSteps();
     private final UserToRegister user = new UserToRegister(SampleUser.email, SampleUser.password, SampleUser.name);
     private final UserToLogin userToLogin = new UserToLogin(SampleUser.email, SampleUser.password);
@@ -17,7 +17,7 @@ public class UserLoginSuccessfulTest {
     }
     @After
     public void tearDown() {
-        userActionSteps.deleteUser(accessToken);
+        userSteps.deleteUser(accessToken);
     }
 
     @Test

@@ -4,7 +4,7 @@ import io.restassured.response.ValidatableResponse;
 import static org.hamcrest.CoreMatchers.equalTo;
 
 public class UserRegistrationSteps {
-    private RegistrationAPI api = new RegistrationAPI();
+    private final RegistrationAPI api = new RegistrationAPI();
     private ValidatableResponse response;
 
     @Step("Create a user")
